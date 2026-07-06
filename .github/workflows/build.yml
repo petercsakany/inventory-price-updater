@@ -1,0 +1,32 @@
+name: Build Windows Exe
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+    - name: Checkout Code
+      uses: actions/checkout@v4
+
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.12'
+
+    - name: Install Libraries
+      run: |
+        pip install pyinstaller pandas openpyxl
+
+    - name: Compile Script
+      run: |
+        pyinstaller --noconsole --onefile test.py
+
+    - name: Upload Finished Exe
+      uses: actions/upload-artifact@v4
+      with:
+        name: inventory-updater-windows
+        path: dist/test.exe
